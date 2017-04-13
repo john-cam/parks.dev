@@ -10,8 +10,8 @@ $limit = 6;
 $allParks = Park::returnResults($limit);
 $lastPage = Park::getLastPage($limit);
 
-$add = getNumberToAdd($page, $lastPage);
-$subtract = getNumberToSubtract($page);
+$add = Park::getNumberToAdd($page, $lastPage);
+$subtract = Park::getNumberToSubtract($page);
 
 ?>
 

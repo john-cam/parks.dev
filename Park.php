@@ -123,4 +123,30 @@ class Park
         $id = $db->lastInsertId();
         return $id;
     }
+
+    public static function getNumberToSubtract($page) {
+    $numberToSubtract = 1;
+    if($page <= 1 || !is_numeric($page)) {
+        if($page < 1) {
+            header("Location: " . "?page=1");
+            die();
+        }
+        $numberToSubtract = 0;
+        $page = 1;
+    }
+    return $numberToSubtract;
+    }
+
+    public static function getNumberToAdd($page, $lastPage) {
+        $numberToAdd = 1;
+        if($page > $lastPage) {
+            $page = $lastPage;
+            $numberToAdd = 0;
+            header("Location: " . "?page=$lastPage");
+            die();
+        } else if($page == $lastPage) {
+            $numberToAdd = 0;
+        }
+        return $numberToAdd;
+    }
 }

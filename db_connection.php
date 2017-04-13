@@ -10,6 +10,7 @@ try {
     );
 
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    return $db;
     
 } catch (PDOException $e) {
     echo $e->getMessage() . PHP_EOL;

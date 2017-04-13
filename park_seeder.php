@@ -11,7 +11,7 @@ $parks = [
         "location" => "Wyoming",
         "date_established" => "1872",
         "area_in_acres" => 2219791.33,
-        "description" => ""
+        "description" => "Yellowstone National Park was founded in 1872. This park was one of the first parks established in the United States"
     ],
     [
         "name" => "Grand Canyon",

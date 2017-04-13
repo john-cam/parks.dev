@@ -4,29 +4,9 @@ require '../db_connection.php';
 
 $hidden = "1";
 
-function pageController() {
-    $data = [];
-    $data['page'] = (isset($_GET['page'])) ? $_GET['page'] : 1;
-    return $data;
-}
+$getPageNumber = Park::getPageNumber();
 
-extract(pageController());
-
-//set the limit and offset of the results
-$limit = 2;
-$offset = ($page - 1) * $limit;
-if($page < 1) {
-    $offset = 0;
-}
-
-function returnResults($connection, $limit, $offset) {
-    // query the database to select the tables and fetch as an associative array
-    $query = "SELECT * FROM national_parks LIMIT " . $limit . " OFFSET " . $offset;
-    $result = $connection->prepare($query);
-    $result->execute();
-    $parksArray = $result->fetchAll(PDO::FETCH_ASSOC);
-    return $parksArray;
-}
+extract($getPageNumber); // This will give us our $page variable
 
 function getLastPage($connection, $limit) {
     // get the total number of columns

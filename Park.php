@@ -2,11 +2,6 @@
 
 class Park
 {
-
-    ///////////////////////////////////
-    // Static Methods and Properties //
-    ///////////////////////////////////
-
     // our connection to the database
     public static $dbc = null;
 
@@ -59,12 +54,23 @@ class Park
         return $data;
     }
 
-    // return the results
+    public static function getLastPage($limit) {
+        // establish database connection
+        $connection = self::dbConnect();
+        // get the total number of columns
+        $getTotal = "SELECT count(*) FROM national_parks";
+        $statement = $connection->prepare($getTotal);
+        $statement->execute();
+        $total = $statement->fetchColumn();
+        $lastPage = ceil($total / $limit);
+        return $lastPage;
+    }
+
     public static function returnResults($limit) {
 
         // establish connection, offset and page number we are on
         $connection = self::dbConnect();
-        $page = extract(self::getPageNumber());
+        extract(self::getPageNumber());
         $offset = ($page - 1) * $limit;
         if($page < 1) {
             $offset = 0;

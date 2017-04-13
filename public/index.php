@@ -1,32 +1,20 @@
 <?php
+require '../Park.php';
 
-require '../db_connection.php';
-
+extract(Park::getPageNumber());
 $hidden = "1";
+$limit = 6;
 
-$getPageNumber = Park::getPageNumber();
-
-extract($getPageNumber); // This will give us our $page variable
-
-function getLastPage($connection, $limit) {
-    // get the total number of columns
-    $getTotal = "SELECT count(*) FROM national_parks";
-    $result = $connection->prepare($getTotal);
-    $result->execute();
-    $total = $result->fetchColumn();
-    $lastPage = ceil($total / $limit);
-    return $lastPage;
-}
-
-$parksArray = returnResults($db, $limit, $offset);
-$lastPage = getLastPage($db, $limit);
+$allParks = Park::returnResults($limit);
+$lastPage = Park::getLastPage($limit);
 
 $numberToAdd = 1;
 $numberToSubtract = 1;
+
 // check the numbers and redirect accordingly
 if($page <= 1 || !is_numeric($page)) {
     if($page < 1) {
-        header("Location: " . "?page=3");
+        header("Location: " . "?page=1");
         die();
     }
     $numberToSubtract = 0;
@@ -40,8 +28,6 @@ if($page > $lastPage) {
 } else if($page == $lastPage) {
     $numberToAdd = 0;
 }
-
-
 
 ?>
 
@@ -75,14 +61,14 @@ if($page > $lastPage) {
                 <table cellpadding="0" cellspacing="0" border="0">
                     <tbody>
                         <?php
-                        foreach($parksArray as $parks) 
+                        foreach($allParks as $parks) 
                         {
                             echo '<tr>';
-                                echo '<td>' . $parks['name'] . '</td>';
-                                echo '<td>' . $parks['location'] . '</td>';
-                                echo '<td>' . $parks['date_established'] . '</td>';
-                                echo '<td>' . $parks['area_in_acres'] . '</td>';
-                                echo '<td>' . $parks['description'] . '</td>';
+                                echo '<td>' . $parks->name . '</td>';
+                                echo '<td>' . $parks->location . '</td>';
+                                echo '<td>' . $parks->dateEstablished . '</td>';
+                                echo '<td>' . $parks->areaInAcres . '</td>';
+                                echo '<td>' . $parks->description . '</td>';
                             echo '</tr>';
                         }
                         ?>

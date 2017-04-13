@@ -1,6 +1,8 @@
 <?php
+
 require '../Park.php';
 
+// extract(Park::getPageNumber()) returns $page as the page number
 extract(Park::getPageNumber());
 $hidden = "1";
 $limit = 6;
@@ -8,26 +10,8 @@ $limit = 6;
 $allParks = Park::returnResults($limit);
 $lastPage = Park::getLastPage($limit);
 
-$numberToAdd = 1;
-$numberToSubtract = 1;
-
-// check the numbers and redirect accordingly
-if($page <= 1 || !is_numeric($page)) {
-    if($page < 1) {
-        header("Location: " . "?page=1");
-        die();
-    }
-    $numberToSubtract = 0;
-    $page = 1;
-}
-if($page > $lastPage) {
-    $page = $lastPage;
-    $numberToAdd = 0;
-    header("Location: " . "?page=$lastPage");
-    die();
-} else if($page == $lastPage) {
-    $numberToAdd = 0;
-}
+$add = Park::getNumberToAdd($page, $lastPage);
+$subtract = Park::getNumberToSubtract($page);
 
 ?>
 
@@ -76,10 +60,10 @@ if($page > $lastPage) {
                 </table>
             </div>
             <div class="href left">
-                <a href="?page=<?php echo $page - $numberToSubtract ?>">Previous</a>
+                <a href="?page=<?php echo $page - $subtract ?>">Previous</a>
             </div>
             <div class="href right">
-                <a href="?page=<?php echo $page + $numberToAdd ?>">Next</a>
+                <a href="?page=<?php echo $page + $add ?>">Next</a>
             </div>
             <div class="spacing-top"> </div>
             <div class="form-header hidden">

@@ -104,13 +104,28 @@ class Park
     public $description;
 
     // inserts a record into the database
-    public function insert() {
-        // TODO: call dbConnect to ensure we have a database connection
-        // TODO: use the $dbc static property to create a perpared statement for
-        //       inserting a record into the parks table
-        // TODO: use the $this keyword to bind the values from this object to
-        //       the prepared statement
-        // TODO: excute the statement and set the $id property of this object to
-        //       the newly created id
+    public function insert($name, $location, $dateEstablished, $areaInAcres, $description) {
+        $connection = self::dbConnect();
+        $query = "INSERT INTO national_parks (name, location, date_established, area_in_acres, description) VALUES (:name, :location, :date_established, :area_in_acres, :description)";
+        $statement = $connection->prepare($query);
+        $statement->bindValue(':name', $name, PDO::PARAM_STR);
+        $statement->bindValue(':location', $location, PDO::PARAM_STR);
+        $statement->bindValue(':date_established', $dateEstablished, PDO::PARAM_STR);
+        $statement->bindValue(':area_in_acres', $areaInAcres, PDO::PARAM_INT);
+        $statement->bindValue(':description', $description, PDO::PARAM_STR);
+        $statement->execute();
+        $id = $db->lastInsertId();
+        return $id;
+    }
+
+    function getLastPage($limit) {
+        $connection = self::dbConnect();
+        // get the total number of columns
+        $getTotal = "SELECT count(*) FROM national_parks";
+        $result = $connection->prepare($getTotal);
+        $result->execute();
+        $total = $result->fetchColumn();
+        $lastPage = ceil($total / $limit);
+        return $lastPage;
     }
 }

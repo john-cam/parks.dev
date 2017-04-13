@@ -123,15 +123,4 @@ class Park
         $id = $db->lastInsertId();
         return $id;
     }
-
-    function getLastPage($limit) {
-        $connection = self::dbConnect();
-        // get the total number of columns
-        $getTotal = "SELECT count(*) FROM national_parks";
-        $result = $connection->prepare($getTotal);
-        $result->execute();
-        $total = $result->fetchColumn();
-        $lastPage = ceil($total / $limit);
-        return $lastPage;
-    }
 }

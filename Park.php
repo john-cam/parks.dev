@@ -35,13 +35,13 @@ class Park
         $array = [];
 
         foreach($allRows as $row) {
-            $park = new Park();
-            $park->id = $row['id'];
-            $park->name = $row['name'];
-            $park->location = $row['location'];
-            $park->dateEstablished = $row['date_established'];
-            $park->areaInAcres = $row['area_in_acres'];
-            $park->description = $row['description'];
+            $park                   = new Park();
+            $park->id               = $row['id'];
+            $park->name             = $row['name'];
+            $park->location         = $row['location'];
+            $park->dateEstablished  = $row['date_established'];
+            $park->areaInAcres      = $row['area_in_acres'];
+            $park->description      = $row['description'];
             array_push($array, $park);
         }
         return $array;
@@ -78,20 +78,20 @@ class Park
 
         // query the database to select the tables and fetch as an associative array
         $query = "SELECT * FROM national_parks LIMIT " . $limit . " OFFSET " . $offset;
-        $result = $connection->prepare($query);
-        $result->execute();
-        $parksArray = $result->fetchAll(PDO::FETCH_ASSOC);
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $parksArray = $statement->fetchAll(PDO::FETCH_ASSOC);
         $array = [];
 
         // create a new object for each result and push them to a new array
         foreach($parksArray as $row) {
-            $park = new Park();
-            $park->id = $row['id'];
-            $park->name = $row['name'];
-            $park->location = $row['location'];
-            $park->dateEstablished = $row['date_established'];
-            $park->areaInAcres = $row['area_in_acres'];
-            $park->description = $row['description'];
+            $park                   = new Park();
+            $park->id               = $row['id'];
+            $park->name             = $row['name'];
+            $park->location         = $row['location'];
+            $park->dateEstablished  = $row['date_established'];
+            $park->areaInAcres      = $row['area_in_acres'];
+            $park->description      = $row['description'];
             array_push($array, $park);
         }
         return $array;

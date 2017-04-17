@@ -14,6 +14,5 @@ try {
     
 } catch (PDOException $e) {
     echo $e->getMessage() . PHP_EOL;
+    echo $db->getAttribute(PDO::ATTR_CONNECTION_STATUS) . PHP_EOL;
 }
-
-// echo $db->getAttribute(PDO::ATTR_CONNECTION_STATUS) . PHP_EOL;

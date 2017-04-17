@@ -1,10 +1,12 @@
 <?php
 
-require '../Park.php';
+$hidden = "1";
+
+require_once '../Park.php';
+require_once '../checkSubmit.php';
 
 // extract(Park::getPageNumber()) returns $page as the page number
 extract(Park::getPageNumber());
-$hidden = "1";
 $limit = 6;
 
 $allParks = Park::returnResults($limit);
@@ -72,19 +74,59 @@ $subtract = Park::getNumberToSubtract($page);
                 </div>
             </div>
             <div class="input-form hidden">
-                <?php require '../checkSubmit.php'; ?>
                 <form action="index.php" method="POST">
-                    <input type="text" name="name" id="park_name" placeholder="Name">
-                    <input type="text" name="location" id="park_name" placeholder="Location">
-                    <input type="text" name="date_established" id="park_name" placeholder="Date Established" maxlength="4">
-                    <input type="text" name="area_in_acres" id="park_name" placeholder="Area In Acres">
-                    <input type="text" name="description" id="park_name" placeholder="Description">
+                    <?php if(isset($_POST['submit'])) { ?>
+                        <?php if(!empty($errors['name'])) {
+                        echo '<div class="error">' . $errors['name'] . '</div>';
+                        }
+                    }?>
+                    <input type="text" name="name" id="name" placeholder="Name">
+                    <?php
+                    if(isset($_POST['submit']))
+                    {
+                        if(!empty($errors['location']))
+                        {
+                            echo '<div class="error">' . $errors['location'] . '</div>';
+                        }
+                    }
+                    ?>
+                    <input type="text" name="location" id="location" placeholder="Location">
+                    <?php
+                    if(isset($_POST['submit']))
+                    {
+                        if(!empty($errors['date_established']))
+                        {
+                            echo '<div class="error">' . $errors['date_established'] . '</div>';
+                        }
+                    }
+                    ?>
+                    <input type="text" name="date_established" id="date_established" placeholder="Date Established" maxlength="4">
+                    <?php
+                    if(isset($_POST['submit']))
+                    {
+                        if(!empty($errors['acres']))
+                        {
+                            echo '<div class="error">' . $errors['acres'] . '</div>';
+                        }
+                    }
+                    ?>
+                    <input type="text" name="area_in_acres" id="area_in_acres" placeholder="Area In Acres">
+                    <?php
+                    if(isset($_POST['submit']))
+                    {
+                        if(!empty($errors['description']))
+                        {
+                            echo '<div class="error">' . $errors['description'] . '</div>';
+                        }
+                    }
+                    ?>
+                    <input type="text" name="description" id="description" placeholder="Description">
                     <input type="hidden" name="page" value="<?php echo $page ?>">
                     <button type="submit" name="submit" id="button">Submit</button>
                 </form>
             </div>
+            <div class="footer"></div>
         </section>
-
         <script>
         $(document).ready(function(){
             var fade = 400;
@@ -117,6 +159,5 @@ $subtract = Park::getNumberToSubtract($page);
             });
         });
         </script>
-
     </body>
 </html>

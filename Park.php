@@ -110,7 +110,7 @@ class Park
     public $description;
 
     // inserts a record into the database
-    public function insert($name, $location, $dateEstablished, $areaInAcres, $description) {
+    public static function insert($name, $location, $dateEstablished, $areaInAcres, $description) {
         $connection = self::dbConnect();
         $query = "INSERT INTO national_parks (name, location, date_established, area_in_acres, description) VALUES (:name, :location, :date_established, :area_in_acres, :description)";
         $statement = $connection->prepare($query);
@@ -120,7 +120,7 @@ class Park
         $statement->bindValue(':area_in_acres', $areaInAcres, PDO::PARAM_INT);
         $statement->bindValue(':description', $description, PDO::PARAM_STR);
         $statement->execute();
-        $id = $db->lastInsertId();
+        $id = $connection->lastInsertId();
         return $id;
     }
 

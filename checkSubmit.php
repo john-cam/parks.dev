@@ -1,47 +1,52 @@
 <?php
 
 if(isset($_POST['submit'])) {
-    $name = strip_tags(ucwords($_POST['name']));
-    $location = strip_tags(ucwords($_POST['location']));
-    $dateEstablished = strip_tags($_POST['date_established']);
-    $areaInAcres = strip_tags($_POST['area_in_acres']);
-    $description = strip_tags($_POST['description']);
-    $page = (int) strip_tags($_POST['page']);
+    
+    require_once 'Input.php';
 
-    $error = "";
-    if($name == "")
-    {
-        $error .= "Please enter your name";
+    $errors = [];
+    $park = new Park();
+    try {
+        $park->name = Input::getString('name');
+    } catch(Exception $e) {
+        $errors['name'] = $e->getMessage();
     }
-    else if(strlen($name) < 2)
-    {
-        $error .= "Please enter a park name";
+
+    try {
+        $park->location = Input::getString('location');
+    } catch (Exception $e) {
+        $errors['location'] = $e->getMessage();
     }
-    else if($location == "")
-    {
-        $error .= "Please enter your location";
+
+    try {
+        $park->dateEstablished = Input::getNumber('date_established');
+    } catch (Exception $e) {
+        $errors['date_established'] = $e->getMessage();
     }
-    else if(!is_numeric($dateEstablished))
-    {
-        $error .= "Please enter a numeric date";
+
+    try {
+        $park->areaInAcres = Input::getNumber('area_in_acres');
+    } catch (Exception $e) {
+        $errors['acres'] = $e->getMessage();
     }
-    else if($dateEstablished > date("Y"))
-    {
-        $error .= "Whoa.. That park hasn't been established yet!";
+
+    try {
+        $park->description = Input::getString('description');
+    } catch (Exception $e) {
+        $errors['description'] = $e->getMessage();
     }
-    else if(!is_numeric($areaInAcres) || $areaInAcres == "")
-    {
-        $error .= "Please enter a number for the area in acres";
+
+    foreach($_REQUEST as $post => $value) {
+        if(($value === "" || $value == null) && $post != 'submit') {
+            $errors[$post] = "Please fill in your input";
+        }
     }
-    else
-    {
-        // no errors, run the query!
-        Park::insert($name, $location, $dateEstablished, $areaInAcres, $description);
+    // no errors, run the query!
+    if(empty($errors)) {
+        Park::insert($park->name, $park->location, $park->dateEstablished, $park->areaInAcres, $park->description);
         $hidden = 1;
-    }
-    if($error != "")
-    {
-        echo '<div class="error">' . $error . '</div>';
+    } else {
+        // if exception thrown
         $hidden = 0;
     }
 }
